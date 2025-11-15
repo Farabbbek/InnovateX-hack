@@ -1,0 +1,24 @@
+# Digital Inspector - Backend Dependencies
+
+# Deep Learning & Computer Vision
+ultralytics>=8.0.0
+torch>=2.0.0
+torchvision>=0.15.0
+opencv-python>=4.8.0
+Pillow>=10.0.0
+
+# Web Framework
+Flask>=3.0.0
+flask-cors>=4.0.0
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0
+
+# Optional: GPU Support
+# CUDA Toolkit требуется для GPU (установить отдельно)
+# Для RTX 3070: CUDA 11.8 или 12.x

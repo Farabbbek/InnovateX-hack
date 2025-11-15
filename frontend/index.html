@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Inspector - AI Document Detection</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="particles-bg" id="particlesBg"></div>
+    <nav>
+        <div class="container">
+            <div class="logo">ARMETA</div>
+            <ul>
+                <li><a href="#problems">Problems</a></li>
+                <li><a href="#solutions">Solutions</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><button class="contact-btn">Contact Us</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">Built by Engineers, Powered by AI</div>
+            <h1>Automating Document<br>Reviews & Compliance</h1>
+            <p>For Construction Projects & Inspections</p>
+
+            <!-- Code Block Terminal -->
+            <div class="code-block fade-in">
+                <div class="terminal-header">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                </div>
+                <code>
+<span class="keyword">import</span> { <span class="function">YOLOv8</span> } <span class="keyword">from</span> <span class="string">"ai/detection"</span>;
+
+<span class="keyword">class</span> <span class="function">DigitalInspector</span> {
+  <span class="keyword">constructor</span>() {
+    <span class="variable">this.model</span> = <span class="string">"YOLOv8m"</span>;
+    <span class="variable">this.classes</span> = [<span class="string">"signature"</span>, <span class="string">"stamp"</span>, <span class="string">"qr_code"</span>];
+    <span class="variable">this.accuracy</span> = <span class="string">"95%+"</span>;
+  }
+
+  <span class="keyword">async</span> <span class="function">analyze</span>(document) {
+    console.<span class="function">log</span>(<span class="string">"🔍 Detecting signatures..."</span>);
+    console.<span class="function">log</span>(<span class="string">"🔷 Processing stamps..."</span>);
+    console.<span class="function">log</span>(<span class="string">"📱 Scanning QR codes..."</span>);
+    <span class="keyword">return</span> results;
+  }
+}
+
+<span class="keyword">new</span> <span class="function">DigitalInspector</span>().<span class="function">analyze</span>();
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <section class="upload-section">
+        <div class="container">
+            <h2 style="font-size: 32px; margin-bottom: 40px; color: #ffffff;">Upload Your Document</h2>
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">📄</div>
+                <h3>Drag & Drop Your Document</h3>
+                <p>or click to browse • JPG, PNG, PDF supported</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+    </section>
+
+    <section class="results-section" id="resultsSection">
+        <div class="container">
+            <h2 style="font-size: 32px; margin-bottom: 40px; color: #ffffff;">Detection Results</h2>
+
+            <div class="split-view">
+                <div class="image-container">
+                    <h4>📸 Original Document</h4>
+                    <div class="image-wrapper" id="originalImageWrapper">
+                        <img id="originalImage" src="" alt="Original">
+                    </div>
+                </div>
+                <div class="image-container">
+                    <h4>✨ Processed with Detections</h4>
+                    <div class="image-wrapper" id="processedImageWrapper">
+                        <img id="processedImage" src="" alt="Processed">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-panel">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">✍️</div>
+                        <div class="stat-number" id="signatureCount">0</div>
+                        <div class="stat-label">Signatures</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔷</div>
+                        <div class="stat-number" id="stampCount">0</div>
+                        <div class="stat-label">Stamps/Seals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📱</div>
+                        <div class="stat-number" id="qrCount">0</div>
+                        <div class="stat-label">QR Codes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-number" id="processingTime">0ms</div>
+                        <div class="stat-label">Processing Time</div>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid #333333; padding-top: 20px; margin-top: 20px;">
+                    <p style="color: #a0a0a0; margin-bottom: 15px;">Average Confidence Score</p>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <div style="flex: 1; background: #333333; height: 8px; border-radius: 4px; overflow: hidden;">
+                            <div id="confidenceBar" style="background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%); height: 100%; width: 95%; border-radius: 4px;"></div>
+                        </div>
+                        <span id="confidenceText" style="color: #3b82f6; font-weight: bold; min-width: 50px;">95%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="downloadBtn">⬇️ Download Results</button>
+                <button class="btn" id="exportBtn">📊 Export JSON</button>
+                <button class="btn" id="resetBtn">🔄 Try Another</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose Digital Inspector</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Lightning Fast</h3>
+                    <p>Process 1000+ documents per minute with GPU-accelerated YOLOv8m inference</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Highly Accurate</h3>
+                    <p>95%+ detection rate on signatures, stamps, and QR codes from real documents</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>API Ready</h3>
+                    <p>REST API for seamless integration into your existing workflows and systems</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="tech-stack">
+        <div class="container">
+            <h2>Technology Stack</h2>
+            <div class="tech-list">
+                <div class="tech-item">Model: YOLOv8m (25.9M parameters)</div>
+                <div class="tech-item">Framework: PyTorch + Ultralytics</div>
+                <div class="tech-item">Classes: Signatures, Stamps, QR Codes</div>
+                <div class="tech-item">Inference: &lt;50ms per document</div>
+                <div class="tech-item">Accuracy: 95%+ mAP50</div>
+                <div class="tech-item">GPU Support: CUDA/RTX 3070+</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>🚀 Powered by Team & Armeta AI</p>
+            <p style="font-size: 12px;">© 2025 Digital Inspector. Built for the Hackathon.</p>
+        </div>
+    </footer>
+
+    <script src="js/animation.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

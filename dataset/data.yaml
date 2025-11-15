@@ -1,0 +1,27 @@
+# Dataset configuration for YOLOv8m training
+# Digital Inspector - Signature, Stamp, QR Code Detection
+
+# Paths (относительно корня проекта)
+path: ./dataset
+train: images/train
+val: images/val
+test: images/test
+
+# Classes
+nc: 3  # Number of classes
+names: ['signature', 'stamp', 'qr_code']
+
+# Dataset Info
+# Total images: ~1000
+#   - Train: 700-800
+#   - Val: 100-150
+#   - Test: 100-150
+
+# Sources:
+# - Tobacco-800 (signatures)
+# - Roboflow Signature Detection
+# - Kaggle Stamps Dataset
+# - Custom QR codes
+
+# Image format: JPG, PNG
+# Label format: YOLO txt (class x_center y_center width height)
