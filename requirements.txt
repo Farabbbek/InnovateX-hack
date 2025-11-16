@@ -18,6 +18,10 @@ flask-cors==4.0.0
 python-dotenv==1.0.0
 gunicorn==21.2.0
 
+# Build helpers (fix Render pip build: setuptools.build_meta)
+setuptools>=68.0.0
+wheel>=0.41.0
+
 # Utilities
 pyyaml==6.0.1
 tqdm==4.66.1
