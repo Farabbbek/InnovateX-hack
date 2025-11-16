@@ -26,21 +26,27 @@ wheels/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# PyTorch
+# PyTorch / model weights
 *.pth
 *.pt
-!best.pt
+*.onnx
+weights/
+checkpoints/
 
-# Dataset
-dataset/raw/
-dataset/images/
-dataset/labels/
+# Dataset (keep only config)
+dataset/**
+!dataset/data.yaml
 *.zip
 *.tar.gz
 
 # YOLOv8 runs
 runs/
 !runs/.gitkeep
+
+# Outputs and artifacts
+outputs/**
+test_results/**
+*.log
 
 # IDE
 .vscode/
@@ -57,10 +63,9 @@ Thumbs.db
 # Environment
 .env
 .env.local
+.venv/
 
-# Models (except best model)
-weights/
-checkpoints/
+# Binary model formats
 *.weights
 
 # Temporary files

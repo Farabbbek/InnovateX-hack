@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Inspector – Task</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <div class="particles-bg" id="particlesBg"></div>
+
+   
+    <nav>
+        <div class="container">
+           <div class="logo"><a href="#">ARMETA.AI</a></div>
+            <ul>
+                <li><a href="index.html">Back to Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+  
+    <section class="task-main">
+        <div class="container task-layout">
+
+            <!-- ЛЕВАЯ КОЛОНКА: Upload -->
+            <div class="task-left">
+                <h1 class="section-title">Upload Your Document</h1>
+                <p class="section-subtitle">
+                    Drag & drop your contract, act or inspection report — AI will analyze it in real time.
+                </p>
+
+                <div class="upload-wrapper">
+                    <div class="upload-glow"></div>
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon">📄</div>
+                        <h3>Drag & Drop Your Document</h3>
+                        <p>or click to browse • JPG, PNG, PDF supported</p>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*,application/pdf">
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА: превью найденных подписей / печатей / QR -->
+            <div class="task-right">
+                <div class="detections-panel">
+                    <h2>Detected Elements</h2>
+                    <p class="detections-subtitle">
+                        After analysis, cropped previews of signatures, stamps and QR codes will appear here.
+                    </p>
+
+                    <div class="detections-grid">
+                        <div class="det-block">
+                            <h3>✍️ Signatures</h3>
+                            <div id="signatureThumbs" class="thumbs-grid empty-state">
+                                <span>No signatures detected yet.</span>
+                            </div>
+                            <div style="margin-top:10px; text-align:right;">
+                                <button id="downloadSigsNoBgBtn" class="btn-action" style="padding: 10px 16px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    ⬇️ Download Signatures (no BG)
+                                </button>
+                            </div>
+                        </div>
+                        <div class="det-block">
+                            <h3>🔷 Stamps & Seals</h3>
+                            <div id="stampThumbs" class="thumbs-grid empty-state">
+                                <span>No stamps detected yet.</span>
+                            </div>
+                            <div style="margin-top:10px; text-align:right;">
+                                <button id="downloadStampsNoBgBtn" class="btn-action" style="padding: 10px 16px; background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    ⬇️ Download Stamps (no BG)
+                                </button>
+                            </div>
+                        </div>
+                        <div class="det-block">
+                            <h3>📱 QR Codes</h3>
+                            <div id="qrThumbs" class="thumbs-grid empty-state">
+                                <span>No QR codes detected yet.</span>
+                            </div>
+                            <div style="margin-top:10px; text-align:right;">
+                                <button id="downloadQrNoBgBtn" class="btn-action" style="padding: 10px 16px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                                    ⬇️ Download QR (no BG)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detections-footer-note">
+                        Smart clustering groups similar stamps and signatures, so you see only what matters.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== НИЖЕ – ПОЛНЫЙ ПРОСМОТР ДОКУМЕНТА + БОКСЫ ===== -->
+    <section class="results-section active" id="resultsSection">
+        <div class="container">
+            <h2 class="section-title">Document View & AI Overlay</h2>
+
+            <div class="split-view">
+                <div class="image-container">
+                    <h4>📸 Original Document</h4>
+                    <div class="image-wrapper" id="originalImageWrapper">
+                        <img id="originalImage" src="" alt="Original document">
+                    </div>
+                </div>
+                <div class="image-container">
+                    <h4>✨ Processed with Detections</h4>
+                    <div class="image-wrapper" id="processedImageWrapper">
+                        <img id="processedImage" src="" alt="Processed">
+                        <canvas id="canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-panel">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">✍️</div>
+                        <div class="stat-number" id="signatureCount">0</div>
+                        <div class="stat-label">Signatures</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔷</div>
+                        <div class="stat-number" id="stampCount">0</div>
+                        <div class="stat-label">Stamps/Seals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📱</div>
+                        <div class="stat-number" id="qrCount">0</div>
+                        <div class="stat-label">QR Codes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-number" id="processingTime">0ms</div>
+                        <div class="stat-label">Processing Time</div>
+                    </div>
+                </div>
+
+                <div class="confidence-block">
+                    <p style="color: #a0a0a0; margin-bottom: 15px;">Average Confidence Score</p>
+                    <div class="confidence-bar-wrapper">
+                        <div class="confidence-bar-bg">
+                            <div id="confidenceBar" class="confidence-bar-fill"></div>
+                        </div>
+                        <span id="confidenceText" class="confidence-value">95%</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons" style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+                    <button id="summaryBtn" class="btn-action" style="padding: 12px 24px; background: linear-gradient(135deg, #22c55e, #16a34a); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        🧠 AI Summary
+                    </button>
+                    <button id="downloadBtn" class="btn-action" style="padding: 12px 24px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        📥 Download Result
+                    </button>
+                    <button id="exportBtn" class="btn-action" style="padding: 12px 24px; background: linear-gradient(135deg, #f093fb, #f5576c); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        📄 Export JSON
+                    </button>
+                    <button id="resetBtn" class="btn-action" style="padding: 12px 24px; background: #374151; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        🔄 Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок с саммари -->
+    <section class="results-section" id="summarySection" style="display:none;">
+        <div class="container">
+            <h2 class="section-title">AI Summary</h2>
+            <div id="summaryCard" style="background:#0f172a; border:1px solid #1f2937; border-radius:12px; padding:20px; color:#e5e7eb; line-height:1.6;"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>🚀 Powered by Team & Armeta AI</p>
+            <p style="font-size: 12px;">© 2025 Digital Inspector. Built for the Hackathon.</p>
+        </div>
+    </footer>
+
+    <script src="js/animation.js"></script>
+    <script src="js/upload.js"></script>
+    <script src="js/home.js"></script>
+    <!-- Client-side ZIP + save helpers -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+</body>
+</html>
