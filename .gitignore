@@ -48,6 +48,16 @@ outputs/**
 test_results/**
 *.log
 
+# Frontend large media (keep compiled/optimized videos in repo)
+# If you have raw source renders put them under frontend/video/raw/ and ignore only that:
+frontend/video/raw/**
+frontend/img/raw/**
+media/**
+assets_large/**
+
+# Allow placeholder keep files
+!frontend/video/.keep
+
 # IDE
 .vscode/
 .idea/
@@ -72,3 +82,12 @@ Thumbs.db
 tmp/
 temp/
 *.tmp
+
+# Large sample PDFs / test docs
+sample_docs/**
+test_pdfs/**
+
+# Compressed archives & exports
+*.7z
+*.rar
+export_zips/**

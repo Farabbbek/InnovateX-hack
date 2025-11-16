@@ -15,7 +15,8 @@ class Config:
     
 
     HOST = '0.0.0.0'
-    PORT = 5000
+    # Render предоставляет переменную окружения PORT; используем её если есть
+    PORT = int(os.getenv('PORT', '5000'))
     DEBUG = False
     
     
