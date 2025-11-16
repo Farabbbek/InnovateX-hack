@@ -14,12 +14,14 @@ try:
     from .llm import summarize_with_perplexity
     from .utils import *  # noqa: F401,F403
     from .config import Config
+    from . import download_model  # noqa: F401
 except ImportError:
     # При прямом запуске файла: python back/app.py
     from detector import DocumentDetector
     from llm import summarize_with_perplexity
     from utils import *  # noqa: F401,F403
     from config import Config
+    import download_model  # noqa: F401
 from dotenv import load_dotenv
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
