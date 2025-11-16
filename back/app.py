@@ -8,10 +8,18 @@ import cv2
 import numpy as np
 from datetime import datetime
 
-from detector import DocumentDetector
-from llm import summarize_with_perplexity
-from utils import *
-from config import Config
+try:
+    # При запуске как пакет: gunicorn back.app:app
+    from .detector import DocumentDetector
+    from .llm import summarize_with_perplexity
+    from .utils import *  # noqa: F401,F403
+    from .config import Config
+except ImportError:
+    # При прямом запуске файла: python back/app.py
+    from detector import DocumentDetector
+    from llm import summarize_with_perplexity
+    from utils import *  # noqa: F401,F403
+    from config import Config
 from dotenv import load_dotenv
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
