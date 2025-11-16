@@ -401,6 +401,96 @@ def get_stats():
     return create_response(success=True, data=stats)
 
 
+@app.route('/detect_dataset', methods=['POST'])
+def detect_dataset():
+    """Детекция с выводом в формате аннотаций (как в примере: file -> page_X -> annotations).
+
+    Формат ответа:
+    {
+      "<filename>": {
+         "page_1": {
+            "annotations": [ {"annotation_1": {"category": "signature", "bbox": {...}, "area": ...}}, ...],
+            "page_size": {"width": W, "height": H}
+         },
+         ...
+      }
+    }
+    """
+    if 'image' not in request.files and 'document' not in request.files:
+        return create_response(False, error='No file provided (use field "image" or "document")', status_code=400)
+
+    file = request.files.get('image') or request.files.get('document')
+    filename = file.filename or 'uploaded'
+
+    try:
+        loaded = load_image_from_upload(file, filename)
+    except Exception as e:
+        return create_response(False, error=f'Failed to decode file: {e}', status_code=400)
+
+    is_pdf = isinstance(loaded, list)
+    pages = loaded if is_pdf else [loaded]
+
+    # Выполняем детекцию постранично
+    annotation_root = {filename: {}}
+    total_counts = {'signature': 0, 'stamp': 0, 'qr_code': 0}
+    ann_global_index = 1
+
+    for page_idx, page_img in enumerate(pages, start=1):
+        try:
+            res = detector.detect(page_img)
+        except Exception:
+            # Если детекция упала — пропускаем страницу, но добавляем размер
+            h, w = page_img.shape[:2]
+            annotation_root[filename][f'page_{page_idx}'] = {
+                'annotations': [],
+                'page_size': {'width': w, 'height': h}
+            }
+            continue
+
+        # Размер страницы
+        h, w = page_img.shape[:2]
+        page_key = f'page_{page_idx}'
+        page_entry = {
+            'annotations': [],
+            'page_size': {'width': w, 'height': h}
+        }
+
+        for det in res['detections']:
+            x1, y1, x2, y2 = det['bbox']
+            width = x2 - x1
+            height = y2 - y1
+            area = width * height
+            ann_id = f'annotation_{ann_global_index}'
+            ann_global_index += 1
+            page_entry['annotations'].append({
+                ann_id: {
+                    'category': det['class_name'],
+                    'bbox': {
+                        'x': int(x1),
+                        'y': int(y1),
+                        'width': float(width),
+                        'height': float(height)
+                    },
+                    'area': float(area)
+                }
+            })
+
+        # Суммируем счётчики
+        total_counts['signature'] += res['count_by_class']['signature']
+        total_counts['stamp'] += res['count_by_class']['stamp']
+        total_counts['qr_code'] += res['count_by_class']['qr_code']
+
+        annotation_root[filename][page_key] = page_entry
+
+    data = {
+        'annotations': annotation_root,
+        'counts_total': total_counts,
+        'page_count': len(pages)
+    }
+
+    return create_response(True, data=data)
+
+
 if __name__ == '__main__':
     app.run(
         host=Config.HOST,
